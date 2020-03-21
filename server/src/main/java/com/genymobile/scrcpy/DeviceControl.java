@@ -56,6 +56,8 @@ public final class DeviceControl {
     private boolean enabledAdbIme = false;
     private final String lastIMEMethod;
 
+    private boolean disableHWOverlays = false;
+
     enum Rotations {
         UNKNOWN,
         PORTRAIT,
@@ -78,7 +80,8 @@ public final class DeviceControl {
             SystemClock.sleep(500);
         }
 
-        tabletMode = options.getTabletMode();
+        tabletMode        = options.getTabletMode();
+        disableHWOverlays = options.getDisableHWOverlays();
 
         if (options.getUseIME() && pm.isPackageAvailable(AdbKeyboard)) {
             lastIMEMethod = Settings.get(Settings.SECURE, Settings.DEFAULT_INPUT_METHOD);
@@ -106,6 +109,9 @@ public final class DeviceControl {
                 Settings.put(Settings.SYSTEM, Settings.SCREEN_BRIGHTNESS, "8");
             }
         }
+
+        if (disableHWOverlays)
+           setDisableHWOverlays(true);
 
         densityChanged    = setDensity(options.getDensity());
         sizeChanged       = setSize(options.getSize());
@@ -174,6 +180,9 @@ public final class DeviceControl {
                 wm.setForcedDisplaySize(baseSize.x, baseSize.y);
         }
 
+        if (disableHWOverlays)
+           setDisableHWOverlays(false);
+
         if (enabledAdbIme && lastIMEMethod != null && !lastIMEMethod.isEmpty())
             imm.setInputMethod(lastIMEMethod);
         if (disableAdbIme)
@@ -195,6 +204,10 @@ public final class DeviceControl {
         Ln.i("initialSize: " + initialSize.x + "x" + initialSize.y + ", baseSize: " + baseSize.x + "x" + baseSize.y + " New size: " + size.x + "x" + size.y);
         wm.setForcedDisplaySize(size.x, size.y);
         return true;
+    }
+
+    private void setDisableHWOverlays(boolean value) {
+        Settings.setDisableHWOverlays(value);
     }
 
     public static boolean isAdbIMEEnabled() {

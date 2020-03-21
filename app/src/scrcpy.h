@@ -26,6 +26,7 @@ struct scrcpy_options {
     const char *size;
     bool tablet;
     bool useIME;
+    bool disableHWOverlays;
 };
 
 bool

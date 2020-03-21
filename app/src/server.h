@@ -44,6 +44,7 @@ struct server_params {
     const char* size;
     bool tablet;
     bool useIME;
+    bool disableHWOverlays;
 };
 
 // init default values

@@ -340,15 +340,16 @@ bool
 scrcpy(const struct scrcpy_options *options) {
     bool record = !!options->record_filename;
     struct server_params params = {
-        .crop            = options->crop,
-        .local_port      = options->port,
-        .max_size        = options->max_size,
-        .bit_rate        = options->bit_rate,
-        .control         = options->control,
-        .density         = options->density,
-        .size            = options->size,
-        .tablet          = options->tablet,
-        .useIME          = options->useIME,
+        .crop              = options->crop,
+        .local_port        = options->port,
+        .max_size          = options->max_size,
+        .bit_rate          = options->bit_rate,
+        .control           = options->control,
+        .density           = options->density,
+        .size              = options->size,
+        .tablet            = options->tablet,
+        .useIME            = options->useIME,
+        .disableHWOverlays = options->disableHWOverlays,
     };
     if (!server_start(&server, options->serial, &params)) {
         SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, "scrcpy", "Server failed to start!", NULL);

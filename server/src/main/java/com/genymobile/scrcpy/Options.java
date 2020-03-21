@@ -15,6 +15,7 @@ public class Options {
     private boolean tabletMode = false;
     private int local_port = 0;
     private boolean useIME = false;
+    private boolean disableHWOverlays = false;
 
     public int getMaxSize() {
         return maxSize;
@@ -74,6 +75,8 @@ public class Options {
 
     public boolean getUseIME() { return useIME; }
 
+    public boolean getDisableHWOverlays() { return disableHWOverlays; }
+
     public void setOption(final String option) {
         String[] pair = option.split("=");
         if (pair.length != 2) {
@@ -97,6 +100,8 @@ public class Options {
             local_port = Integer.parseInt(pair[1]);
         } else if("useIME".equals(pair[0])) {
             useIME = Boolean.parseBoolean(pair[1]);
+        } else if("disableHWOverlays".equals(pair[0])) {
+            disableHWOverlays = Boolean.parseBoolean(pair[1]);
         }
     }
 }

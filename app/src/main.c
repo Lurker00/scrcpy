@@ -36,6 +36,7 @@ struct args {
     const char *size;
     bool tablet;
     bool useIME;
+    bool disableHWOverlays;
 };
 
 static void usage(const char *arg0) {
@@ -65,6 +66,9 @@ static void usage(const char *arg0) {
         "\n"
         "    -d, --density dpi\n"
         "        Set the density for the device screen.\n"
+        "\n"
+        "    --disable-hw-overlays\n"
+        "        Disable HW Overlays (requires root and su rights).\n"
         "\n"
         "    -f, --fullscreen\n"
         "        Start in fullscreen.\n"
@@ -332,6 +336,7 @@ guess_record_format(const char *filename) {
 #define OPT_WINDOW_TITLE          1001
 #define OPT_PUSH_TARGET           1002
 #define OPT_DEVICE_SCREEN_SIZE    1003
+#define OPT_DISABLE_HW_OVERLAYS   1004
 
 static bool
 parse_args(struct args *args, int argc, char *argv[]) {
@@ -340,6 +345,8 @@ parse_args(struct args *args, int argc, char *argv[]) {
         {"bit-rate",              required_argument, NULL, 'b'},
         {"crop",                  required_argument, NULL, 'c'},
         {"density",               required_argument, NULL, 'd'},
+        {"disable-hw-overlays",   no_argument,       NULL,
+                                                 OPT_DISABLE_HW_OVERLAYS},
         {"fullscreen",            no_argument,       NULL, 'f'},
         {"help",                  no_argument,       NULL, 'h'},
         {"ime",                   no_argument,       NULL, 'i'},
@@ -442,6 +449,9 @@ parse_args(struct args *args, int argc, char *argv[]) {
             case OPT_DEVICE_SCREEN_SIZE:
                 args->size = optarg;
                 break;
+            case OPT_DISABLE_HW_OVERLAYS:
+                args->disableHWOverlays = true;
+                break;
             default:
                 // getopt prints the error message on stderr
                 return false;
@@ -519,6 +529,7 @@ main(int argc, char *argv[]) {
         .size = NULL,
         .tablet = false,
         .useIME = false,
+        .disableHWOverlays = false,
         .turn_screen_off = false,
         .render_expired_frames = false,
     };
@@ -536,7 +547,7 @@ main(int argc, char *argv[]) {
         return 0;
     }
 
-    LOGI("scrcpy " SCRCPY_VERSION "-L0 <https://github.com/Lurker00/scrcpy>");
+    LOGI("scrcpy " SCRCPY_VERSION "-L1 <https://github.com/Lurker00/scrcpy>");
 
 #ifdef SCRCPY_LAVF_REQUIRES_REGISTER_ALL
     av_register_all();
@@ -569,6 +580,7 @@ main(int argc, char *argv[]) {
         .size = args.size,
         .tablet = args.tablet,
         .useIME = args.useIME,
+        .disableHWOverlays = args.disableHWOverlays,
         .turn_screen_off = args.turn_screen_off,
         .render_expired_frames = args.render_expired_frames,
     };

@@ -130,6 +130,8 @@ execute_server(struct server *server, const struct server_params *params, bool i
     sprintf(local_port_string, "port=%u", isIP ? params->local_port : 0);
     char ime_string[7+5+1];
     sprintf(ime_string, "useIME=%s", params->useIME ? "true" : "false");
+    char hwolv_string[18+5+1];
+    sprintf(hwolv_string, "disableHWOverlays=%s", params->disableHWOverlays ? "true" : "false");
 
     const char *const cmd[] = {
         "shell",
@@ -148,6 +150,7 @@ execute_server(struct server *server, const struct server_params *params, bool i
         tablet_string,
         local_port_string,
         ime_string,
+        hwolv_string,
 #ifdef WINDOWS_NOCONSOLE
         "fork",
 #else

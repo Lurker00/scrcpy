@@ -37,4 +37,13 @@ public final class Settings {
         }
         catch (Exception e) {}
     }
+
+    public static void setDisableHWOverlays(boolean value) {
+        String[] cmd = new String[]{"su","-c", "service", "call", "SurfaceFlinger", "1008", "i32", value ? "1" : "0"};
+        try {
+            final Process p = Runtime.getRuntime().exec(cmd);
+            p.waitFor();
+        }
+        catch (Exception e) {}
+    }
 }
